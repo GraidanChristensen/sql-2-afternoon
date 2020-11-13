@@ -150,3 +150,77 @@ WHERE type = 'silver';
 DELETE 
 FROM practice_delete
 WHERE value = 150;
+
+
+
+ECOMMERCE
+CREATE TABLE users
+(user_id SERIAL PRIMARY KEY, 
+ name VARCHAR(50), 
+ email VARCHAR(50)
+ );
+
+ CREATE TABLE products
+(product_id SERIAL PRIMARY KEY,
+ name VARCHAR(50),
+ price INT
+ );
+
+CREATE TABLE orders
+(
+ order_id INT,
+ user_id INT REFERENCES users(user_id),
+ product_id INT REFERENCES products(product_id)
+ );
+
+
+INSERT INTO users
+(name, email)
+VALUES('Graidan', 'graidan@ggg')
+INSERT INTO users
+(name, email)
+VALUES('Collin', 'collin@ccc');
+INSERT INTO users
+(name, email)
+VALUES('Cole', 'cole@ccc');
+
+INSERT INTO products
+(name, price)
+VALUES('Shirt', 15);
+INSERT INTO products
+(name, price)
+VALUES('Pants', 30);
+INSERT INTO products
+(name, price)
+VALUES('Hat', 15);
+
+ INSERT INTO orders (order_id, user_id, product_id)
+ VALUES(1, 1, 1),
+ (1, 1, 3),
+ (2, 2, 1),
+ (3, 3, 1),
+ (3, 3, 2);
+
+SELECT o.order_id, p.name 
+FROM orders o
+JOIN products p ON p.product_id = o.product_id
+WHERE o.order_id = 1;
+
+SELECT * FROM orders;
+
+SELECT SUM(p.price), o.order_id
+FROM orders o
+JOIN products p ON p.product_id = o.product_id
+WHERE o.order_id = 3
+GROUP BY o.order_id;
+
+SELECT o.*
+FROM orders o
+JOIN users u ON u.user_id = o.user_id
+WHERE u.user_id = 1;
+
+SELECT count(*), u.user_id
+FROM orders o
+JOIN users u ON u.user_id = o.user_id
+WHERE u.user_id = 3
+GROUP BY u.user_id;
